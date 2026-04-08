@@ -1,0 +1,74 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "WorkFromSchool_20260408 | v1",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://localhost:7247"
+    },
+    {
+      "url": "http://localhost:5293"
+    }
+  ],
+  "paths": {
+    "/api/Cliente/makeDeposit": {
+      "post": {
+        "tags": [
+          "Cliente"
+        ],
+        "parameters": [
+          {
+            "name": "metodo",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/MetodoPagamento"
+            }
+          },
+          {
+            "name": "amount",
+            "in": "query",
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?$",
+              "type": [
+                "number",
+                "string"
+              ],
+              "format": "double"
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "MetodoPagamento": {
+        "type": "integer"
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Cliente"
+    }
+  ]
+}

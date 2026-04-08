@@ -1,0 +1,28 @@
+[
+  {
+    "ContainingType": "WorkFromSchool_20260408.BillingContext.Api.Controllers.ClienteController",
+    "Method": "Deposit",
+    "RelativePath": "api/Cliente/makeDeposit",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "metodo",
+        "Type": "WorkFromSchool_20260408.BillingContext.Application.Domain.Enums.MetodoPagamento",
+        "IsRequired": false
+      },
+      {
+        "Name": "amount",
+        "Type": "System.Decimal",
+        "IsRequired": false
+      },
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  }
+]
