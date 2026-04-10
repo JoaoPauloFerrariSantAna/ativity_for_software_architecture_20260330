@@ -13,10 +13,10 @@ public class MakeDepositCase
         _clienteRepository = clienteRepository;
     }
 
-    public void Deposit(int id, AmountObject amount)
+    public void Deposit(int id, decimal amount)
     {
         Cliente cliente = _clienteRepository.GetCliente(id);
-        cliente.Deposit(amount.Amount);
+        cliente.Deposit(amount);
         _clienteRepository.Update(cliente);
     }
 }
