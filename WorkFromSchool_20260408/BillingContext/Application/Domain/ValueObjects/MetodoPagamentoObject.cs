@@ -2,30 +2,14 @@
 
 using WorkFromSchool_20260408.BillingContext.Application.Domain.Enums;
 
-public class MetodoPagamentoObject : BaseObject
+public class MetodoPagamentoObject
 {
-    public MetodoPagamento MetodoPagamento { get; set; }
+    public MetodoPagamento MetodoPagamento { get; private set; }
 
     public MetodoPagamentoObject(MetodoPagamento metodoPagamento)
     {
-        Validate();
-    }
+        if (!Enum.IsDefined<MetodoPagamento>(metodoPagamento)) throw new Exception("unknown payment method");
 
-    public bool MethodIsValid(MetodoPagamento metodoPagamento)
-    {
-        if (!Enum.IsDefined<MetodoPagamento>(metodoPagamento))
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    public override void Validate()
-    {
-        if (!MethodIsValid(MetodoPagamento))
-        {
-            throw new Exception("Payment method is invalid");
-        }
+        this.MetodoPagamento = metodoPagamento;
     }
 }
