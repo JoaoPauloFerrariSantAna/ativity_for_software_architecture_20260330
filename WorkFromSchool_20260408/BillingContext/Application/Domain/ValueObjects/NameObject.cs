@@ -4,8 +4,6 @@ namespace WorkFromSchool_20260408.BillingContext.Application.Domain.ValueObjects
 
 public class NameObject
 {
-    private readonly IClienteRepository _clienteRepository;
-
     public string Name { get; private set; }
 
     public NameObject(string name)
