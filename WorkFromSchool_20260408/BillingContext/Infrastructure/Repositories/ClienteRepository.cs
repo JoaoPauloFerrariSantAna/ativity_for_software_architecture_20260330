@@ -38,7 +38,7 @@ public class ClienteRepository : IClienteRepository
         c = cliente;
     }
 
-    public void Delete(int id)
+    public void Delete(Guid id)
     {
         // it is ok to just place this:
         // ClienteRepository::GetCliente returns an exception if the id is not found in DB
@@ -46,15 +46,29 @@ public class ClienteRepository : IClienteRepository
         _clienteList.Remove(GetCliente(id));
     }
 
-    public Cliente GetCliente(int id)
+    public Cliente GetCliente(Guid id)
     {
         if(!IsInDatabase(id)) throw new Exception("Cliente is not in database");
         return _clienteList.Find(cl => id == cl.Id);
     }
 
-    public bool IsInDatabase(int id)
+    public Carteira GetCarteira(Guid carteiraId)
+    {
+        Carteira ca = null;
+        if (!HasCarteira(carteiraId)) throw new Exception("Cliente has no Carteira");
+        foreach (Cliente c in _clienteList) if (carteiraId == c.Carteira.Id) ca = c.Carteira;
+        return ca;
+    }
+
+    public bool IsInDatabase(Guid id)
     {
         foreach (Cliente c in _clienteList) if (id == c.Id) return true;
+        return false;
+    }
+
+    public bool HasCarteira(Guid carteiraId)
+    {
+        foreach (Cliente c in _clienteList) if (carteiraId == c.Carteira.Id) return true;
         return false;
     }
 }
