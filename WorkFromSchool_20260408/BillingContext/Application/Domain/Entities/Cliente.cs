@@ -2,6 +2,21 @@
 
 public class Cliente
 {
+    public Guid Id { get; set; }
+    public string Nome { get; set; } = string.Empty;
+    public string Cpf { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public Carteira Carteira { get; set; }
+
+    public Cliente(string nome, decimal amount, string cpf, string email, Carteira carteira)
+    {
+        Id = new Guid();
+        Nome = nome;
+        Cpf = cpf;
+        Email = email;
+        Carteira = carteira;
+    }
+
     public Cliente GetCliente(int id)
     {
         return null;
@@ -9,6 +24,6 @@ public class Cliente
 
     public void Deposit(decimal amount)
     {
-        throw new NotImplementedException();
+        this.Carteira.Saldo += amount;
     }
 }
