@@ -1,5 +1,4 @@
 ﻿using WorkFromSchool_20260408.BillingContext.Application.Domain.Entities;
-using WorkFromSchool_20260408.BillingContext.Application.Domain.ValueObjects;
 using WorkFromSchool_20260408.BillingContext.Application.Domain.Interfaces;
 
 namespace WorkFromSchool_20260408.BillingContext.Application.Domain.UseCases;
@@ -13,7 +12,7 @@ public class MakeDepositCase
         _clienteRepository = clienteRepository;
     }
 
-    public void Deposit(int id, decimal amount)
+    public void Deposit(Guid id, decimal amount)
     {
         Cliente cliente = _clienteRepository.GetCliente(id);
         cliente.Deposit(amount);
