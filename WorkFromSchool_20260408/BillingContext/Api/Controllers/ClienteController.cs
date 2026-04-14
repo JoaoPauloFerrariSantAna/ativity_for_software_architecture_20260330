@@ -4,6 +4,7 @@ using WorkFromSchool_20260408.BillingContext.Application.Domain.UseCases;
 using WorkFromSchool_20260408.BillingContext.Application.Domain.Enums;
 using WorkFromSchool_20260408.BillingContext.Application.Domain.ValueObjects;
 using WorkFromSchool_20260408.BillingContext.Application.Domain.Entities;
+using WorkFromSchool_20260408.BillingContext.Application.Domain.Dtos.Requests;
 
 namespace WorkFromSchool_20260408.BillingContext.Api.Controllers;
 
@@ -25,24 +26,24 @@ public class ClienteController : ControllerBase
     }
 
     [HttpGet("getById:id")]
-    public IActionResult GetById(int id)
+    public IActionResult GetById(Guid id)
     {
-        try
-        {
-            return Ok(_clienteRepository.GetCliente(id));
-        }
-        catch (Exception e)
-        {
-            return NotFound(e.Message);
-        }
+        try { return Ok(_clienteRepository.GetCliente(id)); }
+        catch (Exception e) { return NotFound(e.Message); }
     }
 
     [HttpPost("postCliente")]
-    public IActionResult PostCliente(string name, decimal amount)
+    public IActionResult PostCliente([FromBody] ClientePostRequest postRequest)
     {
         try
         {
-            Cliente cliente = new Cliente((new NameObject(name)).Name, (new AmountObject(amount)).Amount);
+            Cliente cliente = new Cliente(
+                (new NameObject(postRequest.Name)).Name,
+                (new AmountObject(postRequest.Amount)).Amount,
+                (new CpfObject(postRequest.Cpf)).Cpf,
+                (new EmailObject(postRequest.Email)).Email,
+                (new CarteiraObject(_clienteRepository, postRequest.CarteiraId).Carteira)
+            );
             _clienteRepository.Post(cliente);
         }
         catch (Exception e)
@@ -54,7 +55,7 @@ public class ClienteController : ControllerBase
     }
 
     [HttpPost("makeDeposit")]
-    public IActionResult Deposit(MetodoPagamento metodo, decimal amount, int id)
+    public IActionResult Deposit(MetodoPagamento metodo, decimal amount, Guid id)
     {
         try
         {
@@ -78,16 +79,10 @@ public class ClienteController : ControllerBase
     }
 
     [HttpDelete("deleteById:id")]
-    public IActionResult DeleteById(int id)
+    public IActionResult DeleteById(Guid id)
     {
-        try
-        {
-            _clienteRepository.Delete(id);
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
-        }
+        try { _clienteRepository.Delete(id); }
+        catch (Exception e) { return BadRequest(e.Message); }
 
         return Ok();
     }
