@@ -19,32 +19,33 @@ public class ClienteController : ControllerBase
         _clienteRepository = clienteRepository;
     }
 
-    [HttpGet("/getAll")]
+    [HttpGet("getAll")]
     public IActionResult GetAll()
     {
         return Ok(_clienteRepository.All());
     }
 
     [HttpGet("getById:id")]
-    public IActionResult GetById(Guid id)
+    public IActionResult Get(Guid id)
     {
-        try { return Ok(_clienteRepository.GetCliente(id)); }
+        try { return Ok(_clienteRepository.Get(id)); }
         catch (Exception e) { return NotFound(e.Message); }
     }
 
     [HttpPost("postCliente")]
-    public IActionResult PostCliente([FromBody] ClientePostRequest postRequest)
+    public IActionResult Post([FromBody] ClientePostRequest postRequest)
     {
         try
         {
-            Cliente cliente = new Cliente(
-                (new NameObject(postRequest.Name)).Name,
-                (new AmountObject(postRequest.Amount)).Amount,
-                (new CpfObject(postRequest.Cpf)).Cpf,
-                (new EmailObject(postRequest.Email)).Email,
-                (new CarteiraObject(_clienteRepository, postRequest.CarteiraId).Carteira)
+            _clienteRepository.Post(
+                    new Cliente(
+                        (new NomeObject(postRequest.Name)).Nome,
+                        (new SaldoObject(postRequest.Amount)).Saldo,
+                        (new CpfObject(postRequest.Cpf)).Cpf,
+                        (new EmailObject(postRequest.Email)).Email,
+                        (new CarteiraObject(_clienteRepository, postRequest.CarteiraId).Carteira)
+                    )
             );
-            _clienteRepository.Post(cliente);
         }
         catch (Exception e)
         {
@@ -61,7 +62,7 @@ public class ClienteController : ControllerBase
         {
             new MetodoPagamentoObject(metodo);
             MakeDepositCase mdc = new MakeDepositCase(_clienteRepository);
-            mdc.Deposit(id, (new AmountObject(amount)).Amount);
+            mdc.Deposit(id, (new SaldoObject(amount)).Saldo);
         }
         catch (Exception ex)
         {
@@ -79,7 +80,7 @@ public class ClienteController : ControllerBase
     }
 
     [HttpDelete("deleteById:id")]
-    public IActionResult DeleteById(Guid id)
+    public IActionResult Delete(Guid id)
     {
         try { _clienteRepository.Delete(id); }
         catch (Exception e) { return BadRequest(e.Message); }
