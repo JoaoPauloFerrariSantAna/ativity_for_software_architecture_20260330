@@ -3,7 +3,7 @@
 using WorkFromSchool_20260408.BillingContext.Application.Domain.Entities;
 using WorkFromSchool_20260408.BillingContext.Application.Domain.Enums;
 
-internal interface IBillingRepository
+interface IBillingRepository
 {
     public Cartao CardRegister(string numero, TipoCartao tipo, string cvv, DateOnly validade, string nomeTitular);
     public Cartao CardDelete(string numero);
