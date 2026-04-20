@@ -10,20 +10,20 @@ public class Cliente
 
     public Cliente(string nome, decimal amount, string cpf, string email, Carteira carteira)
     {
-        Id = new Guid();
+        Id = Guid.NewGuid();
         Nome = nome;
         Cpf = cpf;
         Email = email;
         Carteira = carteira;
     }
 
-    public Cliente GetCliente(int id)
-    {
-        return null;
-    }
-
     public void Deposit(decimal amount)
     {
         this.Carteira.Saldo += amount;
+    }
+
+    public void Withdraw(decimal amount)
+    {
+        this.Carteira.Saldo -= amount;
     }
 }

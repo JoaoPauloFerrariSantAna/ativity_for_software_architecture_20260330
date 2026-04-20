@@ -2,12 +2,19 @@
 
 public class Carteira
 {
-    public Guid Id { get; set;  }
+    public Guid Id { get; set; }
     public decimal Saldo { get; set; }
     public static List<ContaBancaria> ContaBancarias { get; set; } = new List<ContaBancaria>();
 
-    public Carteira()
+    public Carteira(decimal saldo, ContaBancaria contaBancaria)
     {
-        Id = new Guid();
+        Id = Guid.NewGuid();
+        Saldo = saldo;
+        Attach(contaBancaria);
+    }
+
+    private void Attach(ContaBancaria contaBancaria)
+    {
+        ContaBancarias.Add(contaBancaria);
     }
 }
