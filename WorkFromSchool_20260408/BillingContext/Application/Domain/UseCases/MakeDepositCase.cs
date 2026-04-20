@@ -14,7 +14,7 @@ public class MakeDepositCase
 
     public void Deposit(Guid id, decimal amount)
     {
-        Cliente cliente = _clienteRepository.GetCliente(id);
+        Cliente cliente = _clienteRepository.Get(id);
         cliente.Deposit(amount);
         _clienteRepository.Update(cliente);
     }
