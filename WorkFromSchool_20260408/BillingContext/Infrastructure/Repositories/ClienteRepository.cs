@@ -3,72 +3,63 @@ using WorkFromSchool_20260408.BillingContext.Application.Domain.Interfaces;
 
 namespace WorkFromSchool_20260408.BillingContext.Infrastructure.Repositories;
 
-using DatabaseEntities = List<Cliente>;
-
 public class ClienteRepository : IClienteRepository
 {
-    private static DatabaseEntities _clienteList = new List<Cliente>();
+    private static List<Cliente> _clientes = new List<Cliente>();
 
-    public void Deposit(Cliente cliente, decimal amount)
-    {
-        throw new NotImplementedException();
+    public List<Cliente> All() { return _clientes; }
+
+    public bool IsInDatabase(Guid id) { return (_clientes.Find(c => id == c.Id) != null); }
+    
+    public bool HasCarteira(Guid carteiraId) {
+        return (_clientes.Find(c => carteiraId == c.Carteira.Id) != null);
     }
 
-    public DatabaseEntities All()
-    {
-        return _clienteList;
-    }
+    public Cliente Get(Guid id) { return _clientes.Find(cl => id == cl.Id); }
 
     public void Post(Cliente cliente)
     {
-        if (cliente == null) throw new Exception("Client data is empty");
-
-        if (IsInDatabase(cliente.Id)) throw new Exception("It is in database already");
-
-        // TODO: Add more fields tto validate
-
-        _clienteList.Add(cliente);
+        if (cliente == null)
+            throw new Exception("Client data is empty");
+        
+        if (IsInDatabase(cliente.Id) && !IsCpfUnique(cliente.Cpf))
+            throw new Exception("Cliente is in database already");
+        
+        _clientes.Add(cliente);
     }
+
     public void Update(Cliente cliente)
     {
-        // it is ok to just place this:
-        // ClienteRepository::GetCliente returns an exception if the id is not found in DB
-        // witch will go down in the callstack
-        Cliente c = GetCliente(cliente.Id);
+        Cliente c = null;
+        
+        if (cliente == null)
+            throw new Exception("Client data is empty");
+        
+        if(!IsInDatabase(cliente.Id))
+            throw new Exception("Cliente does not exists");
+        
+        c = Get(cliente.Id);
         c = cliente;
     }
 
     public void Delete(Guid id)
     {
-        // it is ok to just place this:
-        // ClienteRepository::GetCliente returns an exception if the id is not found in DB
-        // witch will go down in the callstack
-        _clienteList.Remove(GetCliente(id));
-    }
-
-    public Cliente GetCliente(Guid id)
-    {
-        if(!IsInDatabase(id)) throw new Exception("Cliente is not in database");
-        return _clienteList.Find(cl => id == cl.Id);
+        if (!IsInDatabase(id))
+            throw new Exception("Cliente does not exists");
+        
+        _clientes.Remove(Get(id));
     }
 
     public Carteira GetCarteira(Guid carteiraId)
     {
-        Carteira ca = null;
-        if (!HasCarteira(carteiraId)) throw new Exception("Cliente has no Carteira");
-        foreach (Cliente c in _clienteList) if (carteiraId == c.Carteira.Id) ca = c.Carteira;
-        return ca;
+        if (!HasCarteira(carteiraId))
+            throw new Exception("Cliente has no Carteira");
+        
+        return _clientes.Find(cliente => carteiraId == cliente.Carteira.Id).Carteira;
     }
 
-    public bool IsInDatabase(Guid id)
+    public bool IsCpfUnique(string cpf)
     {
-        foreach (Cliente c in _clienteList) if (id == c.Id) return true;
-        return false;
-    }
-
-    public bool HasCarteira(Guid carteiraId)
-    {
-        foreach (Cliente c in _clienteList) if (carteiraId == c.Carteira.Id) return true;
-        return false;
+        return (_clientes.Find(c => cpf == c.Cpf) == null);
     }
 }
