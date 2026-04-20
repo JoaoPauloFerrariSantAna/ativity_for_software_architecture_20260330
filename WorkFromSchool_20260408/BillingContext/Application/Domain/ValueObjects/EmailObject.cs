@@ -1,15 +1,15 @@
 ﻿namespace WorkFromSchool_20260408.BillingContext.Application.Domain.ValueObjects;
 
-public class EmailObject
+public class EmailObject : BaseStringValueObject
 {
-    public string Email { get; set; } = string.Empty;
+    public string Email { get; private set; }
 
     public EmailObject(string email)
     {
-        if (!string.IsNullOrEmpty(email)) throw new Exception("Email field must be filled");
-
+        CheckLength(email);
+        
         if (!email.Contains('@')) throw new Exception("Email is invalid");
 
-        this.Email = email;
+        Email = email;
     }
 }

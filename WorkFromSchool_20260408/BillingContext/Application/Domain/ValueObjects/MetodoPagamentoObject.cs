@@ -8,8 +8,9 @@ public class MetodoPagamentoObject
 
     public MetodoPagamentoObject(MetodoPagamento metodoPagamento)
     {
-        if (!Enum.IsDefined<MetodoPagamento>(metodoPagamento)) throw new Exception("unknown payment method");
+        if (!Enum.IsDefined<MetodoPagamento>(metodoPagamento))
+            throw new Exception("unknown payment method");
 
-        this.MetodoPagamento = metodoPagamento;
+        MetodoPagamento = metodoPagamento;
     }
 }

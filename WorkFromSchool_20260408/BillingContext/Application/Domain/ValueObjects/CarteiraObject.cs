@@ -7,14 +7,15 @@ public class CarteiraObject
 {
     private readonly IClienteRepository _clienteRepository;
 
-    public Carteira Carteira { get; set; }
+    public Carteira Carteira { get; private set; }
 
     public CarteiraObject(IClienteRepository clienteRepository, Guid carteiraId)
     {
         _clienteRepository = clienteRepository;
 
-        if (!_clienteRepository.HasCarteira(carteiraId)) throw new Exception("Carteira does exists");
+        if (!_clienteRepository.HasCarteira(carteiraId))
+            throw new Exception("Carteira does not exists");
 
-        this.Carteira = _clienteRepository.GetCarteira(carteiraId);
+        Carteira = _clienteRepository.GetCarteira(carteiraId);
     }
 }

@@ -1,11 +1,13 @@
 ﻿namespace WorkFromSchool_20260408.BillingContext.Application.Domain.ValueObjects;
 
-public class AmountObject
+public class SaldoObject
 {
-    public decimal Amount;
+    public decimal Saldo { get; private set; }
 
-    public AmountObject(decimal amount)
+    public SaldoObject(decimal saldo)
     {
-        if (amount < 0) throw new Exception("Amount must be positive!");
+        if (saldo < 0) throw new Exception("Saldo must be positive!");
+
+        Saldo = saldo;
     }
 }

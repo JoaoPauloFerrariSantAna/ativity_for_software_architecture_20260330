@@ -2,14 +2,14 @@
 
 namespace WorkFromSchool_20260408.BillingContext.Application.Domain.ValueObjects;
 
-public class NameObject
+public class NomeObject : BaseStringValueObject
 {
-    public string Name { get; private set; }
+    public string Nome { get; private set; }
 
-    public NameObject(string name)
+    public NomeObject(string nome)
     {
-        if (String.IsNullOrEmpty(name)) throw new Exception("Name field is empty");
+        CheckForEmptiness(nome);
 
-        this.Name = name;
+        Nome = nome;
     }
 }
