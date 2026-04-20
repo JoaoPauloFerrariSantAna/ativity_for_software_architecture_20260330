@@ -1,3 +1,5 @@
+using System.Reflection;
+using WorkFromSchool_20260408.BillingContext.Application.Domain.Entities;
 using WorkFromSchool_20260408.BillingContext.Application.Domain.Interfaces;
 using WorkFromSchool_20260408.BillingContext.Infrastructure.Repositories;
 
@@ -11,6 +13,20 @@ public class Program
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
         builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
+        //builder.Services.AddScoped<IContaBancariaRepositiory, ContaBancariaRepository>();
+
+        // solution (and thanks): https://www.crispy-engineering.com/p/registering-all-types-as-generic-interfaces-in-assembly-in-dotnet-core
+        Assembly.GetExecutingAssembly()
+            .GetTypes()
+            .Where(a => a.Name.EndsWith("Repository") && !a.IsAbstract && !a.IsInterface)
+            .Select(a => new { assignedType = a, serviceTypes = a.GetInterfaces().ToList() })
+            .ToList()
+            .ForEach(typesToRegister =>
+            {
+                typesToRegister.serviceTypes.ForEach(typeToRegister => {
+                    builder.Services.AddScoped(typeToRegister, typesToRegister.assignedType);
+                });
+            });
     }
 
     private static void ConfigureHttpPipeline(WebApplication app)
